@@ -8,12 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import <BmobSDK/Bmob.h>
+#import "MusicRecommendViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
-@property (strong, nonatomic) UIWindow *window;
+@property(strong, nonatomic) UIWindow *window;
 
-@property (readonly, strong) NSPersistentContainer *persistentContainer;
+@property(readonly, strong) NSPersistentContainer *persistentContainer;
+@property(strong, nonatomic) NSMutableArray *playingList;
+@property(nonatomic) NSInteger playingIndex;
 
 - (void)saveContext;
 

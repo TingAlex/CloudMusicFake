@@ -13,10 +13,54 @@
 @end
 
 @implementation AppDelegate
-
+NSMutableArray *playingList;
+NSInteger playingIndex;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [Bmob registerWithAppKey:@"ce94e7b2a412e84d71c28f8d8b1236f8"];
+
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    [self.window makeKeyAndVisible];
+
+    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+    self.window.rootViewController = tabBarController;
+    UIViewController *musicRecommend = [[MusicRecommendViewController alloc] init];
+//    UIViewController *contacts = [[Contacts alloc] init];
+//    UIViewController *find = [[Find alloc] init];
+//    UIViewController *me = [[Me alloc] init];
+
+    UINavigationController *musicRecommendNC = [[UINavigationController alloc] initWithRootViewController:musicRecommend];
+//    UINavigationController *contactsNC = [[UINavigationController alloc] initWithRootViewController:contacts];
+//    UINavigationController *findNC = [[UINavigationController alloc] initWithRootViewController:find];
+//    UINavigationController *meNC = [[UINavigationController alloc] initWithRootViewController:me];
+
+    [musicRecommendNC.navigationBar setBarTintColor:[UIColor grayColor]];
+//    [contactsNC.navigationBar setBarTintColor:[UIColor grayColor]];
+//    [findNC.navigationBar setBarTintColor:[UIColor grayColor]];
+//    [meNC.navigationBar setBarTintColor:[UIColor grayColor]];
+    [musicRecommendNC.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], UITextAttributeTextColor, nil]];
+//    [contactsNC.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], UITextAttributeTextColor, nil]];
+//    [findNC.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], UITextAttributeTextColor, nil]];
+//    [meNC.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], UITextAttributeTextColor, nil]];
+//    wechatNC.tabBarItem.image = [UIImage imageNamed:@"Wechat.png"];
+    //    [wechatNC.tabBar]
+    tabBarController.tabBar.tintColor = [UIColor redColor];
+//    contactsNC.tabBarItem.image = [UIImage imageNamed:@"Contacts.png"];
+//    findNC.tabBarItem.image = [UIImage imageNamed:@"Find.png"];
+//    meNC.tabBarItem.image = [UIImage imageNamed:@"Me.png"];
+
+    musicRecommendNC.tabBarItem.title = @"Daily";
+//    contactsNC.tabBarItem.title = @"Contacts";
+//    findNC.tabBarItem.title = @"Find";
+//    meNC.tabBarItem.title = @"Me";
+//    tabBarController.viewControllers = @[wechatNC, contactsNC, findNC, meNC];
+    tabBarController.viewControllers = @[musicRecommendNC];
+    //to avoid lazyondemond.
+    for (UIViewController *controller in tabBarController.viewControllers) {
+        UIView *view = controller.view;
+    }
+
     return YES;
 }
 
