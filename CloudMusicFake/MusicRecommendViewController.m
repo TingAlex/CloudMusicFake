@@ -12,6 +12,7 @@
 @property(nonatomic, strong) UISearchController *searchController;
 @property(nonatomic, strong) UITableView *tableView;
 @property(strong, nonatomic) NSMutableArray *songsListArray;
+
 @end
 
 @implementation MusicRecommendViewController
@@ -63,8 +64,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     MusicPlayViewController *musicPlay = [[MusicPlayViewController alloc] initWithNibName:@"MusicPlayViewController" bundle:nil];
-
-//    musicPlay.songInfo = [self.songsListArray objectAtIndex:[indexPath row]];
     extern NSInteger playingIndex;
     playingIndex = indexPath.row;
 //    NSLog(@"playingIndex is %ld", playingIndex);
@@ -88,6 +87,7 @@
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
 //        NSLog(@"%@",dic);
         self.songsListArray = dic[@"song_list"];
+//        [self storeRecommendMusicListInBmob:self.songsListArray];
         extern NSMutableArray *playingList;
         playingList = self.songsListArray;
 //        NSLog(@"playingList is %@", playingList);
@@ -95,6 +95,22 @@
 //        NSLog(@"%@", songList[0]);
     }    failure:^(NSURLSessionDataTask *_Nullable task, NSError *_Nonnull error) {
         NSLog(@"请求失败");
+    }];
+}
+
+- (void)storeRecommendMusicListInBmob:(NSMutableArray *)songsListArray {
+    NSDictionary *musicDic;
+    BmobObjectsBatch *batch = [[BmobObjectsBatch alloc] init];
+    for (NSInteger i = 0; i < songsListArray.count; i++) {
+        musicDic = @{@"albumPic": songsListArray[i][@"album_500_500"], @"songTitle": songsListArray[i][@"title"], @"songId": songsListArray[i][@"song_id"], @"artistName": songsListArray[i][@"artist_name"], @"artistId": songsListArray[i][@"artist_id"], @"albumTitle": songsListArray[i][@"album_title"], @"albumId": songsListArray[i][@"album_id"]};
+        [batch saveBmobObjectWithClassName:@"Music" parameters:musicDic];
+    }
+    [batch batchObjectsInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+        if (error != nil) {
+            NSLog(@"batch error %@", [error description]);
+        } else {
+            NSLog(@"add recommend music list in bmob successful!");
+        }
     }];
 }
 

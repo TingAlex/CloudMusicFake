@@ -34,10 +34,13 @@
 @property(nonatomic, assign) NSTimer *_timer;
 @property(nonatomic, assign) id _playTimeObserver;
 @property(weak, nonatomic) IBOutlet UISlider *ProgressBar;
+@property(weak, nonatomic) IBOutlet UIView *RotatePart;
+@property(nonatomic, assign) bool flagForAnimation;
 
 // 播放状态
 @property(nonatomic, assign) BOOL isPlaying;
 @property(nonatomic, assign) BOOL isSliding; // 是否正在滑动
+@property(nonatomic, assign) float angle;
 
 // 是否横屏
 @property(nonatomic, assign) BOOL isLandscape;
@@ -60,6 +63,7 @@
 
 @implementation MusicPlayViewController
 - (IBAction)Like:(id)sender {
+    [self setupLikeBtn];
 }
 
 - (IBAction)Download:(id)sender {
@@ -78,7 +82,7 @@
     [self removeObserveAndNOtification];
     extern NSMutableArray *playingList;
     extern NSInteger playingIndex;
-    self.songInfo = [playingList objectAtIndex:(playingIndex-1)%playingList.count];
+    self.songInfo = [playingList objectAtIndex:(playingIndex - 1) % playingList.count];
     [self setMusicPicByInfo];
     [self playMusicById:[self.songInfo valueForKey:@"song_id"]];
     [self addObserverAndNotification]; // 添加观察者，发布通知
@@ -96,12 +100,13 @@
     [self removeObserveAndNOtification];
     extern NSMutableArray *playingList;
     extern NSInteger playingIndex;
-    self.songInfo = [playingList objectAtIndex:(playingIndex+1)%playingList.count];
+    self.songInfo = [playingList objectAtIndex:(playingIndex + 1) % playingList.count];
     [self setMusicPicByInfo];
     [self playMusicById:[self.songInfo valueForKey:@"song_id"]];
     [self addObserverAndNotification]; // 添加观察者，发布通知
 }
--(void)setMusicPicByInfo{
+
+- (void)setMusicPicByInfo {
     NSURL *albumPicUrl = [NSURL URLWithString:[self.songInfo valueForKey:@"album_500_500"]];
     NSData *albumPicData = [NSData dataWithContentsOfURL:albumPicUrl];
     UIImageView *bgImgView = [[UIImageView alloc] initWithFrame:self.view.bounds];
@@ -110,12 +115,14 @@
     UIVisualEffectView *effectView = [[UIVisualEffectView alloc] initWithEffect:effect];
     effectView.frame = CGRectMake(0, 0, bgImgView.frame.size.width, bgImgView.frame.size.height);
     [bgImgView addSubview:effectView];
-    bgImgView.tag=111;
-    UIView *subviews=[self.view viewWithTag:111];
+    bgImgView.tag = 111;
+    UIView *subviews = [self.view viewWithTag:111];
     [subviews removeFromSuperview];
     [self.view insertSubview:bgImgView atIndex:0];
     self.AlbumBackImage.image = [UIImage imageNamed:@"cm2_play_disc"];
     self.AlbumImage.image = [[UIImage alloc] initWithData:albumPicData];
+    self.AlbumImage.layer.masksToBounds = YES;
+    self.AlbumImage.layer.cornerRadius = 165 / 2.0f;
 }
 
 - (IBAction)PlayList:(id)sender {
@@ -128,8 +135,8 @@
 
 - (IBAction)playerSliderTouchUpInside:(id)sender {
     self.isSliding = NO; // 滑动结束
-    NSLog(@"player slider touch up inside");
-    NSLog(@"not sliding");
+//    NSLog(@"player slider touch up inside");
+//    NSLog(@"not sliding");
     [self play];
 //    [self monitoringPlayback:self.songItem]; // 监听播放
 }
@@ -175,7 +182,7 @@
         // 更新slider, 如果正在滑动则不更新
 
         if (self.isSliding == NO) {
-            NSLog(@"not sliding");
+//            NSLog(@"not sliding");
             [WeakSelf updateVideoSlider:currentPlayTime];
         } else {
             NSLog(@"is sliding");
@@ -189,7 +196,7 @@
     NSDate *dateS = [NSDate dateWithTimeIntervalSince1970:currentTime];
     NSDateFormatter *formatterS = [[NSDateFormatter alloc] init];
     [formatterS setDateFormat:@"mm:ss"];
-    self.NowTime.text =[formatterS stringFromDate:dateS];
+    self.NowTime.text = [formatterS stringFromDate:dateS];
 //    self.NowTime.text = [[NSString alloc] initWithFormat:@"%.2f", currentTime];
 }
 
@@ -216,13 +223,15 @@
     NSDate *dateS = [NSDate dateWithTimeIntervalSince1970:duration];
     NSDateFormatter *formatterS = [[NSDateFormatter alloc] init];
     [formatterS setDateFormat:@"mm:ss"];
-    self.TotalTime.text =[formatterS stringFromDate:dateS];
+    self.TotalTime.text = [formatterS stringFromDate:dateS];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     //Add glass effect background picture.
+    [self setupInitialState];
+
     extern NSMutableArray *playingList;
     extern NSInteger playingIndex;
     self.songInfo = [playingList objectAtIndex:playingIndex];
@@ -305,23 +314,145 @@
     }
 }
 
+- (void)setupInitialState {
+    self.NowTime.text = @"00:00";
+    self.TotalTime.text = @"00:00";
+    self.NowTime.textColor = [UIColor whiteColor];
+    self.TotalTime.textColor = [UIColor whiteColor];
+    self.angle = 0.0;
+    self.flagForAnimation = false;
+    self.RotatePart.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.5];
+    [self setupPlayBtn];
+    [self setupLikeBtn];
+    [self setPlayStyle:0];
+    [self setupDownloadBtn];
+    [self setupCommentBtn];
+    [self setupMoreInfoBtn];
+    [self setupUpMusicBtn];
+    [self setupNextBtn];
+    [self setupPlayListBtn];
+}
+
 - (void)play {
     self.isPlaying = YES;
+    [self startAnimation];
     [self.player play]; // 调用avplayer 的play方法
     [self addObserverAndNotification]; // 添加观察者，发布通知
-//    [self.playButton setImage:[UIImage imageNamed:@"Stop"] forState:(UIControlStateNormal)];
-//    [self.playerButton setImage:[UIImage imageNamed:@"player_pause_iphone_window"] forState:(UIControlStateNormal)];
-//    [self.playerFullScreenButton setImage:[UIImage imageNamed:@"player_pause_iphone_fullscreen"] forState:(UIControlStateNormal)];
+    [self setupPlayBtn];
 }
 
 - (void)pause {
     self.isPlaying = NO;
+    [self stopAnimation];
     [self.player pause];
-//    [self.playButton setImage:[UIImage imageNamed:@"Play"] forState:(UIControlStateNormal)];
-//    [self.playerButton setImage:[UIImage imageNamed:@"player_start_iphone_window"] forState:(UIControlStateNormal)];
-//    [self.playerFullScreenButton setImage:[UIImage imageNamed:@"player_start_iphone_fullscreen"] forState:(UIControlStateNormal)];
+    [self setupPauseBtn];
 }
 
+- (void)setPlayStyle:(NSInteger)style {
+    switch (style) {
+        case 0://Loop
+        {
+            [self.PlayMode setImage:[UIImage imageNamed:@"cm2_icn_loop"] forState:UIControlStateNormal];
+            [self.PlayMode setImage:[UIImage imageNamed:@"cm2_icn_loop_prs"] forState:UIControlStateHighlighted];
+        }
+            break;
+        case 1://Random
+        {
+            [self.PlayMode setImage:[UIImage imageNamed:@"cm2_icn_shuffle"] forState:UIControlStateNormal];
+            [self.PlayMode setImage:[UIImage imageNamed:@"cm2_icn_shuffle_prs"] forState:UIControlStateHighlighted];
+        }
+            break;
+        case 2://Line
+        {
+            [self.PlayMode setImage:[UIImage imageNamed:@"cm2_icn_one"] forState:UIControlStateNormal];
+            [self.PlayMode setImage:[UIImage imageNamed:@"cm2_icn_one_prs"] forState:UIControlStateHighlighted];
+        }
+            break;
+
+        default:
+            break;
+    }
+}
+
+- (void)setupPlayBtn {
+    [self.PlayOrStop setImage:[UIImage imageNamed:@"cm2_fm_btn_pause"] forState:UIControlStateNormal];
+    [self.PlayOrStop setImage:[UIImage imageNamed:@"cm2_fm_btn_pause_prs"] forState:UIControlStateHighlighted];
+}
+
+- (void)setupPauseBtn {
+    [self.PlayOrStop setImage:[UIImage imageNamed:@"cm2_fm_btn_play"] forState:UIControlStateNormal];
+    [self.PlayOrStop setImage:[UIImage imageNamed:@"cm2_fm_btn_play_prs"] forState:UIControlStateHighlighted];
+}
+
+- (void)setupLikeBtn {
+    [self.Like setImage:[UIImage imageNamed:@"cm2_play_icn_love"] forState:UIControlStateNormal];
+    [self.Like setImage:[UIImage imageNamed:@"cm2_play_icn_love_prs"] forState:UIControlStateHighlighted];
+}
+
+- (void)setupLikedBtn {
+    [self.Like setImage:[UIImage imageNamed:@"cm2_play_icn_loved"] forState:UIControlStateNormal];
+    [self.Like setImage:[UIImage imageNamed:@"cm2_play_icn_loved_prs"] forState:UIControlStateHighlighted];
+}
+
+- (void)setupDownloadBtn {
+    [self.Download setImage:[UIImage imageNamed:@"cm2_icn_dld"] forState:UIControlStateNormal];
+    [self.Download setImage:[UIImage imageNamed:@"cm2_icn_dld_prs"] forState:UIControlStateHighlighted];
+}
+
+- (void)setupCommentBtn {
+    [self.Comment setImage:[UIImage imageNamed:@"cm2_fm_btn_cmt"] forState:UIControlStateNormal];
+    [self.Comment setImage:[UIImage imageNamed:@"cm2_fm_btn_cmt_prs"] forState:UIControlStateHighlighted];
+}
+
+- (void)setupMoreInfoBtn {
+    [self.MoreInfo setImage:[UIImage imageNamed:@"cm2_play_icn_more"] forState:UIControlStateNormal];
+    [self.MoreInfo setImage:[UIImage imageNamed:@"cm2_play_icn_more_prs"] forState:UIControlStateHighlighted];
+}
+
+- (void)setupUpMusicBtn {
+    [self.UpMusic setImage:[UIImage imageNamed:@"cm2_fm_btn_previous"] forState:UIControlStateNormal];
+    [self.UpMusic setImage:[UIImage imageNamed:@"cm2_fm_btn_previous_prs"] forState:UIControlStateHighlighted];
+}
+
+- (void)setupNextBtn {
+    [self.NextMusic setImage:[UIImage imageNamed:@"cm2_fm_btn_next"] forState:UIControlStateNormal];
+    [self.NextMusic setImage:[UIImage imageNamed:@"cm2_fm_btn_next_prs"] forState:UIControlStateHighlighted];
+}
+
+- (void)setupPlayListBtn {
+    [self.PlayList setImage:[UIImage imageNamed:@"cm2_icn_list"] forState:UIControlStateNormal];
+    [self.PlayList setImage:[UIImage imageNamed:@"cm2_icn_list_prs"] forState:UIControlStateHighlighted];
+}
+
+- (void)startAnimation {
+    if (self.flagForAnimation == false) {
+        NSLog(@"flag is false!");
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+        //默认是顺时针效果，若将fromValue和toValue的值互换，则为逆时针效果
+        animation.fromValue = [NSNumber numberWithFloat:0.f];
+        animation.toValue = [NSNumber numberWithFloat:M_PI * 2];
+        animation.duration = 3;
+        animation.autoreverses = NO;
+        animation.fillMode = kCAFillModeForwards;
+        animation.repeatCount = MAXFLOAT; //如果这里想设置成一直自旋转，可以设置为MAXFLOAT，否则设置具体的数值则代表执行多少次
+        [self.RotatePart.layer addAnimation:animation forKey:@"run"];
+        self.flagForAnimation = true;
+    } else {
+        NSLog(@"flag is true!");
+        CFTimeInterval pausedTime = [self.RotatePart.layer timeOffset];
+        self.RotatePart.layer.speed = 1.0;
+        self.RotatePart.layer.timeOffset = 0.0;
+        self.RotatePart.layer.beginTime = 0.0;
+        CFTimeInterval timeSincePause = [self.RotatePart.layer convertTime:CACurrentMediaTime() fromLayer:nil] - pausedTime;
+        self.RotatePart.layer.beginTime = timeSincePause;
+    }
+}
+
+- (void)stopAnimation {
+    CFTimeInterval pausedTime = [self.RotatePart.layer convertTime:CACurrentMediaTime() fromLayer:nil];
+    self.RotatePart.layer.speed = 0.0;
+    self.RotatePart.layer.timeOffset = pausedTime;
+}
 /*
 #pragma mark - Navigation
 

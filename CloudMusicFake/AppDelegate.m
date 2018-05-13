@@ -23,45 +23,78 @@ NSInteger playingIndex;
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     [self.window makeKeyAndVisible];
 
-    UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    self.window.rootViewController = tabBarController;
-    UIViewController *musicRecommend = [[MusicRecommendViewController alloc] init];
-//    UIViewController *contacts = [[Contacts alloc] init];
-//    UIViewController *find = [[Find alloc] init];
-//    UIViewController *me = [[Me alloc] init];
+    BmobQuery *bquery = [BmobQuery queryWithClassName:@"_User"];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([userDefaults objectForKey:@"userPhone"] != nil && [userDefaults objectForKey:@"password"] != nil) {
+        NSArray *array = @[@{@"mobilePhoneNumber": [userDefaults objectForKey:@"userPhone"]}, @{@"password": [userDefaults objectForKey:@"password"]}];
+        [bquery addTheConstraintByAndOperationWithArray:array];
+        [bquery findObjectsInBackgroundWithBlock:^(NSArray *array1, NSError *error) {
+            if (error) {
+                NSLog(@"network error!");
+            } else {
+                if (array1.count == 1) {
+                    NSLog(@"%@", [array1[0] objectForKey:@"mobilePhoneNumber"]);
+                    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+                    self.window.rootViewController = tabBarController;
+                    UIViewController *musicRecommend = [[MusicRecommendViewController alloc] init];
+                    UIViewController *myMusic = [[MyMusicViewController alloc] init];
+                    UIViewController *personal = [[PersonalViewController alloc] init];
 
-    UINavigationController *musicRecommendNC = [[UINavigationController alloc] initWithRootViewController:musicRecommend];
-//    UINavigationController *contactsNC = [[UINavigationController alloc] initWithRootViewController:contacts];
-//    UINavigationController *findNC = [[UINavigationController alloc] initWithRootViewController:find];
-//    UINavigationController *meNC = [[UINavigationController alloc] initWithRootViewController:me];
+                    UINavigationController *musicRecommendNC = [[UINavigationController alloc] initWithRootViewController:musicRecommend];
+                    UINavigationController *myMusicNC = [[UINavigationController alloc] initWithRootViewController:myMusic];
+                    UINavigationController *personalNC = [[UINavigationController alloc] initWithRootViewController:personal];
 
-    [musicRecommendNC.navigationBar setBarTintColor:[UIColor grayColor]];
-//    [contactsNC.navigationBar setBarTintColor:[UIColor grayColor]];
-//    [findNC.navigationBar setBarTintColor:[UIColor grayColor]];
-//    [meNC.navigationBar setBarTintColor:[UIColor grayColor]];
-    [musicRecommendNC.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], UITextAttributeTextColor, nil]];
-//    [contactsNC.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], UITextAttributeTextColor, nil]];
-//    [findNC.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], UITextAttributeTextColor, nil]];
-//    [meNC.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], UITextAttributeTextColor, nil]];
-//    wechatNC.tabBarItem.image = [UIImage imageNamed:@"Wechat.png"];
-    //    [wechatNC.tabBar]
-    tabBarController.tabBar.tintColor = [UIColor redColor];
+                    [musicRecommendNC.navigationBar setBarTintColor:[UIColor grayColor]];
+                    [myMusicNC.navigationBar setBarTintColor:[UIColor grayColor]];
+                    [personalNC.navigationBar setBarTintColor:[UIColor grayColor]];
+                    [musicRecommendNC.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], UITextAttributeTextColor, nil]];
+                    [myMusicNC.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], UITextAttributeTextColor, nil]];
+                    [personalNC.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], UITextAttributeTextColor, nil]];
+                    tabBarController.tabBar.tintColor = [UIColor redColor];
+
 //    contactsNC.tabBarItem.image = [UIImage imageNamed:@"Contacts.png"];
 //    findNC.tabBarItem.image = [UIImage imageNamed:@"Find.png"];
 //    meNC.tabBarItem.image = [UIImage imageNamed:@"Me.png"];
 
-    musicRecommendNC.tabBarItem.title = @"Daily";
-//    contactsNC.tabBarItem.title = @"Contacts";
-//    findNC.tabBarItem.title = @"Find";
-//    meNC.tabBarItem.title = @"Me";
-//    tabBarController.viewControllers = @[wechatNC, contactsNC, findNC, meNC];
-    tabBarController.viewControllers = @[musicRecommendNC];
-    //to avoid lazyondemond.
-    for (UIViewController *controller in tabBarController.viewControllers) {
-        UIView *view = controller.view;
-    }
+                    musicRecommendNC.tabBarItem.title = @"Daily";
+                    myMusicNC.tabBarItem.title = @"Mine";
+                    personalNC.tabBarItem.title = @"Account";
 
-    return YES;
+                    tabBarController.viewControllers = @[musicRecommendNC, myMusicNC, personalNC];
+                    //to avoid lazyondemond.
+                    for (UIViewController *controller in tabBarController.viewControllers) {
+                        UIView *view = controller.view;
+                    }
+                } else {
+                    NSLog(@"need login!");
+                    //TODO:need login part
+                    UINavigationController *logOrSign = [[UINavigationController alloc] initWithRootViewController:[[LogOrSignViewController alloc] init]];
+                    logOrSign.navigationBar.barTintColor = [UIColor redColor];
+                    NSDictionary *dict = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+                    [logOrSign.navigationBar setTitleTextAttributes:dict];
+                    self.window.rootViewController = logOrSign;
+                    self.window.backgroundColor = [UIColor whiteColor];
+                    [self.window makeKeyAndVisible];
+                }
+            }
+        }];
+        HoldingViewController *holdingViewController = [[HoldingViewController alloc] init];
+        self.window.rootViewController = holdingViewController;
+        self.window.backgroundColor = [UIColor redColor];
+        [self.window makeKeyAndVisible];
+        return YES;
+    } else {
+        NSLog(@"need login!");
+        //TODO:need login part
+        UINavigationController *logOrSign = [[UINavigationController alloc] initWithRootViewController:[[LogOrSignViewController alloc] init]];
+        logOrSign.navigationBar.barTintColor = [UIColor redColor];
+        NSDictionary *dict = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+        [logOrSign.navigationBar setTitleTextAttributes:dict];
+        self.window.rootViewController = logOrSign;
+        self.window.backgroundColor = [UIColor whiteColor];
+        [self.window makeKeyAndVisible];
+        return YES;
+    }
 }
 
 
@@ -107,7 +140,7 @@ NSInteger playingIndex;
                 if (error != nil) {
                     // Replace this implementation with code to handle the error appropriately.
                     // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                    
+
                     /*
                      Typical reasons for an error here include:
                      * The parent directory does not exist, cannot be created, or disallows writing.
@@ -122,7 +155,7 @@ NSInteger playingIndex;
             }];
         }
     }
-    
+
     return _persistentContainer;
 }
 

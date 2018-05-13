@@ -9,7 +9,12 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import <BmobSDK/Bmob.h>
+#import "MyCollectionViewController.h"
+#import "PersonalViewController.h"
+#import "LogOrSignViewController.h"
 #import "MusicRecommendViewController.h"
+#import "HoldingViewController.h"
+
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

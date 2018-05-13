@@ -11,6 +11,6 @@
 #import <AFNetworking.h>
 #import "AppDelegate.h"
 
-@interface MusicRecommendViewController : UIViewController<UISearchBarDelegate, UISearchResultsUpdating, UITableViewDataSource, UITableViewDelegate>
+@interface MusicRecommendViewController : UIViewController <UISearchBarDelegate, UISearchResultsUpdating, UITableViewDataSource, UITableViewDelegate>
 
 @end

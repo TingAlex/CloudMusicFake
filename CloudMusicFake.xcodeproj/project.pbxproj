@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		34EE033EF9513D870EDA9BEE /* libPods-CloudMusicFake.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D4323AF5BEF10AF3F4966FD /* libPods-CloudMusicFake.a */; };
+		C410003E841E8C526BEDBD34 /* MyCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C41007C224DD70A209EFBA6E /* MyCollectionViewController.m */; };
+		C41003922472C2B515BD5349 /* LogOrSignViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C41001A052FA044F42BDB99D /* LogOrSignViewController.m */; };
+		C41004B1C1F4940A0B25CC21 /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C410051350BFAC950E314323 /* SignUpViewController.m */; };
+		C41005758B37BF780D4F1022 /* PersonalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C41005E0102C329C758C11A3 /* PersonalViewController.m */; };
+		C41008A1CFDCEE1B25870C6A /* MusicCellOfMyCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = C4100F4F5276CD9B7556B29B /* MusicCellOfMyCollectionView.m */; };
+		C41009DFFC9F9FBD16AECA0D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4100F139C9FD037465E8F77 /* LoginViewController.m */; };
+		C4100D37D5419265C173BC06 /* MyMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4100603D5A7A7289CFBEFE2 /* MyMusicViewController.m */; };
 		FA03D1F3208F482300F7B0F2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FA03D1F2208F482300F7B0F2 /* AppDelegate.m */; };
 		FA03D1F6208F482300F7B0F2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA03D1F5208F482300F7B0F2 /* ViewController.m */; };
 		FA03D1F9208F482300F7B0F2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA03D1F7208F482300F7B0F2 /* Main.storyboard */; };
@@ -17,11 +24,12 @@
 		FA03D204208F482300F7B0F2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FA03D203208F482300F7B0F2 /* main.m */; };
 		FA03D20E208F482300F7B0F2 /* CloudMusicFakeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA03D20D208F482300F7B0F2 /* CloudMusicFakeTests.m */; };
 		FA03D219208F482300F7B0F2 /* CloudMusicFakeUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = FA03D218208F482300F7B0F2 /* CloudMusicFakeUITests.m */; };
+		FA5D5BC920A7D6AB00CABDB4 /* HoldingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5D5BC720A7D6AB00CABDB4 /* HoldingViewController.m */; };
+		FA5D5BCA20A7D6AB00CABDB4 /* HoldingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA5D5BC820A7D6AB00CABDB4 /* HoldingViewController.xib */; };
 		FABFE26620A01A8A0049E16B /* MusicRecommendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FABFE26420A01A8A0049E16B /* MusicRecommendViewController.m */; };
 		FABFE26720A01A8A0049E16B /* MusicRecommendViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FABFE26520A01A8A0049E16B /* MusicRecommendViewController.xib */; };
 		FABFE26B20A01D340049E16B /* MusicPlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FABFE26920A01D340049E16B /* MusicPlayViewController.m */; };
 		FABFE26C20A01D340049E16B /* MusicPlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = FABFE26A20A01D340049E16B /* MusicPlayViewController.xib */; };
-		FAC6895820A14DC700279E0D /* message.jpg in Resources */ = {isa = PBXBuildFile; fileRef = FAC6895720A14DC700279E0D /* message.jpg */; };
 		FAF13DED208F6DEC00E34A92 /* testmic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FAF13DEC208F6DEC00E34A92 /* testmic.mp3 */; };
 /* End PBXBuildFile section */
 
@@ -46,6 +54,20 @@
 		00D5CE7EE2D37832E62C4291 /* Pods-CloudMusicFake.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CloudMusicFake.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CloudMusicFake/Pods-CloudMusicFake.debug.xcconfig"; sourceTree = "<group>"; };
 		3D4323AF5BEF10AF3F4966FD /* libPods-CloudMusicFake.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CloudMusicFake.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9751AAB9BDBC62358CE16ED5 /* Pods-CloudMusicFake.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CloudMusicFake.release.xcconfig"; path = "Pods/Target Support Files/Pods-CloudMusicFake/Pods-CloudMusicFake.release.xcconfig"; sourceTree = "<group>"; };
+		C410000C1CA601ADCFE1CF62 /* LogOrSignViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogOrSignViewController.h; sourceTree = "<group>"; };
+		C4100174190F36B1DD3E600F /* MyCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCollectionViewController.h; sourceTree = "<group>"; };
+		C41001A052FA044F42BDB99D /* LogOrSignViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogOrSignViewController.m; sourceTree = "<group>"; };
+		C410042AA5A850094909A53B /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		C410051350BFAC950E314323 /* SignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpViewController.m; sourceTree = "<group>"; };
+		C41005E0102C329C758C11A3 /* PersonalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalViewController.m; sourceTree = "<group>"; };
+		C4100603D5A7A7289CFBEFE2 /* MyMusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyMusicViewController.m; sourceTree = "<group>"; };
+		C41007C224DD70A209EFBA6E /* MyCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCollectionViewController.m; sourceTree = "<group>"; };
+		C410098797A5AB806B70220C /* MusicCellOfMyCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicCellOfMyCollectionView.h; sourceTree = "<group>"; };
+		C4100AC6D51B470BC977D547 /* SignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpViewController.h; sourceTree = "<group>"; };
+		C4100B0B892A1D79ECC41C21 /* PersonalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalViewController.h; sourceTree = "<group>"; };
+		C4100E48FBBF009574B3CE56 /* MyMusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMusicViewController.h; sourceTree = "<group>"; };
+		C4100F139C9FD037465E8F77 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		C4100F4F5276CD9B7556B29B /* MusicCellOfMyCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicCellOfMyCollectionView.m; sourceTree = "<group>"; };
 		FA03D1EE208F482200F7B0F2 /* CloudMusicFake.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CloudMusicFake.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA03D1F1208F482300F7B0F2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		FA03D1F2208F482300F7B0F2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -63,13 +85,15 @@
 		FA03D214208F482300F7B0F2 /* CloudMusicFakeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CloudMusicFakeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA03D218208F482300F7B0F2 /* CloudMusicFakeUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CloudMusicFakeUITests.m; sourceTree = "<group>"; };
 		FA03D21A208F482300F7B0F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FA5D5BC620A7D6AB00CABDB4 /* HoldingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HoldingViewController.h; sourceTree = "<group>"; };
+		FA5D5BC720A7D6AB00CABDB4 /* HoldingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HoldingViewController.m; sourceTree = "<group>"; };
+		FA5D5BC820A7D6AB00CABDB4 /* HoldingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HoldingViewController.xib; sourceTree = "<group>"; };
 		FABFE26320A01A8A0049E16B /* MusicRecommendViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MusicRecommendViewController.h; sourceTree = "<group>"; };
 		FABFE26420A01A8A0049E16B /* MusicRecommendViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MusicRecommendViewController.m; sourceTree = "<group>"; };
 		FABFE26520A01A8A0049E16B /* MusicRecommendViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MusicRecommendViewController.xib; sourceTree = "<group>"; };
 		FABFE26820A01D340049E16B /* MusicPlayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MusicPlayViewController.h; sourceTree = "<group>"; };
 		FABFE26920A01D340049E16B /* MusicPlayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MusicPlayViewController.m; sourceTree = "<group>"; };
 		FABFE26A20A01D340049E16B /* MusicPlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MusicPlayViewController.xib; sourceTree = "<group>"; };
-		FAC6895720A14DC700279E0D /* message.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = message.jpg; sourceTree = "<group>"; };
 		FAF13DEC208F6DEC00E34A92 /* testmic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = testmic.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -150,7 +174,6 @@
 				FA03D1FD208F482300F7B0F2 /* Assets.xcassets */,
 				FA03D1FF208F482300F7B0F2 /* LaunchScreen.storyboard */,
 				FA03D202208F482300F7B0F2 /* Info.plist */,
-				FAC6895720A14DC700279E0D /* message.jpg */,
 				FA03D203208F482300F7B0F2 /* main.m */,
 				FA03D1FA208F482300F7B0F2 /* CloudMusicFake.xcdatamodeld */,
 				FABFE26320A01A8A0049E16B /* MusicRecommendViewController.h */,
@@ -159,6 +182,23 @@
 				FABFE26820A01D340049E16B /* MusicPlayViewController.h */,
 				FABFE26920A01D340049E16B /* MusicPlayViewController.m */,
 				FABFE26A20A01D340049E16B /* MusicPlayViewController.xib */,
+				C41005E0102C329C758C11A3 /* PersonalViewController.m */,
+				C410098797A5AB806B70220C /* MusicCellOfMyCollectionView.h */,
+				C41001A052FA044F42BDB99D /* LogOrSignViewController.m */,
+				C410000C1CA601ADCFE1CF62 /* LogOrSignViewController.h */,
+				C4100F139C9FD037465E8F77 /* LoginViewController.m */,
+				C4100174190F36B1DD3E600F /* MyCollectionViewController.h */,
+				C410042AA5A850094909A53B /* LoginViewController.h */,
+				C4100603D5A7A7289CFBEFE2 /* MyMusicViewController.m */,
+				C410051350BFAC950E314323 /* SignUpViewController.m */,
+				C4100E48FBBF009574B3CE56 /* MyMusicViewController.h */,
+				C4100AC6D51B470BC977D547 /* SignUpViewController.h */,
+				C4100F4F5276CD9B7556B29B /* MusicCellOfMyCollectionView.m */,
+				C4100B0B892A1D79ECC41C21 /* PersonalViewController.h */,
+				C41007C224DD70A209EFBA6E /* MyCollectionViewController.m */,
+				FA5D5BC620A7D6AB00CABDB4 /* HoldingViewController.h */,
+				FA5D5BC720A7D6AB00CABDB4 /* HoldingViewController.m */,
+				FA5D5BC820A7D6AB00CABDB4 /* HoldingViewController.xib */,
 			);
 			path = CloudMusicFake;
 			sourceTree = "<group>";
@@ -291,11 +331,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA03D201208F482300F7B0F2 /* LaunchScreen.storyboard in Resources */,
-				FAC6895820A14DC700279E0D /* message.jpg in Resources */,
 				FAF13DED208F6DEC00E34A92 /* testmic.mp3 in Resources */,
 				FABFE26C20A01D340049E16B /* MusicPlayViewController.xib in Resources */,
 				FA03D1FE208F482300F7B0F2 /* Assets.xcassets in Resources */,
 				FA03D1F9208F482300F7B0F2 /* Main.storyboard in Resources */,
+				FA5D5BCA20A7D6AB00CABDB4 /* HoldingViewController.xib in Resources */,
 				FABFE26720A01A8A0049E16B /* MusicRecommendViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -378,6 +418,14 @@
 				FABFE26620A01A8A0049E16B /* MusicRecommendViewController.m in Sources */,
 				FA03D204208F482300F7B0F2 /* main.m in Sources */,
 				FA03D1F3208F482300F7B0F2 /* AppDelegate.m in Sources */,
+				C41005758B37BF780D4F1022 /* PersonalViewController.m in Sources */,
+				C41003922472C2B515BD5349 /* LogOrSignViewController.m in Sources */,
+				C41009DFFC9F9FBD16AECA0D /* LoginViewController.m in Sources */,
+				C4100D37D5419265C173BC06 /* MyMusicViewController.m in Sources */,
+				C41004B1C1F4940A0B25CC21 /* SignUpViewController.m in Sources */,
+				C41008A1CFDCEE1B25870C6A /* MusicCellOfMyCollectionView.m in Sources */,
+				FA5D5BC920A7D6AB00CABDB4 /* HoldingViewController.m in Sources */,
+				C410003E841E8C526BEDBD34 /* MyCollectionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

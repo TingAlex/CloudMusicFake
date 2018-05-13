@@ -159,7 +159,20 @@
 
 }
 
+- (void)tryLogin {
+//    //TODO:login user
+//    [BmobUser loginInbackgroundWithMobilePhoneNumber:phoneNumber
+//                                         andPassword:password block:^(BmobUser *user, NSError *error) {
+//                if (user) {
+//                    NSLog(@"%@",user);
+//                } else {
+//                    NSLog(@"%@",error);
+//                }
+//            }];
+}
+
 - (void)testTables {
+    //TODO:set user
     BmobObject *user = [BmobObject objectWithClassName:@"_User"];
     NSDictionary *userDic = @{@"username": @"小黑", @"password": @"12345", @"email": @"158@qq.com", @"headpic": @""};
     [user saveAllWithDictionary:userDic];
@@ -174,6 +187,15 @@
             NSLog(@"Unknow error");
         }
     }];
+
+    //TODO:get user from anywhere
+    BmobUser *bUser = [BmobUser currentUser];
+    if (bUser) {
+//
+    } else {
+//对象为空时，可打开用户注册界面
+    }
+
 
     BmobObject *music = [BmobObject objectWithClassName:@"Music"];
     NSDictionary *musicDic = @{@"songTitle": @"TingING", @"artistName": @"Ting"};
