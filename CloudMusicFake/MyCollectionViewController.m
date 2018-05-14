@@ -10,7 +10,7 @@
 
 @interface MyCollectionViewController ()
 @property(nonatomic, strong) UITableView *tableView;
-
+@property(strong, nonatomic) NSMutableArray *songsListArray;
 @end
 
 @implementation MyCollectionViewController
@@ -19,7 +19,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.navigationItem.title = @"我的音乐";
-
+    self.songsListArray = [[NSMutableArray alloc] initWithObjects:nil];
+    [self getLikedMusicList];
     CGRect screen = [[UIScreen mainScreen] bounds];
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, screen.size.width, screen.size.height)];
     self.tableView.delegate = self;
@@ -41,7 +42,7 @@
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 100;
+    return [self.songsListArray count];
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -50,8 +51,10 @@
     if (cell == nil) {
         cell = [[MusicCellOfMyCollectionView alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:reuseFlag];
     }
-    cell.myLabel1.text = @"一带一路天地共舞";
-    cell.myLabel2.text = @"石崇正";
+    NSDictionary *temp = self.songsListArray[indexPath.row];
+
+    cell.myLabel1.text = [temp objectForKey:@"songTitle"];
+    cell.myLabel2.text = [[NSString alloc] initWithFormat:@"%@ - %@", [temp objectForKey:@"artistName"], [temp objectForKey:@"albumTitle"]];
     return cell;
 }
 
@@ -59,6 +62,45 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    MusicPlayViewController *musicPlay = [[MusicPlayViewController alloc] initWithNibName:@"MusicPlayViewController" bundle:nil];
+    extern NSInteger playingIndex;
+    playingIndex = indexPath.row;
+//    NSLog(@"playingIndex is %ld", playingIndex);
+//    NSLog(@"show songInfo: %@", musicPlay.songInfo);
+    self.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:musicPlay animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
+}
+
+- (void)getLikedMusicList {
+    //在每日推荐中，我们需要这些信息
+    //歌曲缩略图：album_500_500，歌曲名：title，歌曲id：song_id，歌手名：artist_name，歌手id：artist_id，专辑名：album_title，专辑id：album_id
+
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *userId = [userDefaults objectForKey:@"userId"];
+    //关联对象表
+    BmobQuery *bquery = [BmobQuery queryWithClassName:@"Music"];
+//需要查询的列
+    BmobObject *user = [BmobObject objectWithoutDataWithClassName:@"User" objectId:userId];
+    [bquery whereObjectKey:@"likes" relatedTo:user];
+    extern NSMutableArray *playingList;
+    [bquery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+        if (error) {
+            NSLog(@"%@", error);
+        } else {
+            self.songsListArray = array;
+            playingList = self.songsListArray;
+            NSLog(@"playingList now is : %@", playingList);
+            [self.tableView reloadData];
+        }
+    }];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self.tableView reloadData];
+    [self getLikedMusicList];
+}
 /*
 #pragma mark - Navigation
 

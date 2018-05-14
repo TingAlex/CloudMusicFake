@@ -45,26 +45,25 @@
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dDm-vS-rmp">
                                     <rect key="frame" x="0.0" y="4" width="30" height="30"/>
                                     <connections>
-                                        <action selector="Like:" destination="-1" eventType="touchUpInside" id="UvA-DU-TrL"/>
-                                        <action selector="onClick:" destination="-1" eventType="touchUpInside" id="G1F-cB-03U"/>
+                                        <action selector="Like:" destination="-1" eventType="touchUpInside" id="RRk-Xw-7yz"/>
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nuc-ni-P4F">
                                     <rect key="frame" x="90" y="4" width="30" height="30"/>
                                     <connections>
-                                        <action selector="Download:" destination="-1" eventType="touchUpInside" id="WFP-eP-Mub"/>
+                                        <action selector="Download:" destination="-1" eventType="touchUpInside" id="J39-Vd-tx1"/>
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pxw-qC-3AP">
                                     <rect key="frame" x="180" y="4" width="30" height="30"/>
                                     <connections>
-                                        <action selector="Comment:" destination="-1" eventType="touchUpInside" id="8Uh-v7-wVf"/>
+                                        <action selector="Comment:" destination="-1" eventType="touchUpInside" id="ZjQ-Hb-2HH"/>
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CiQ-uN-HWO">
                                     <rect key="frame" x="270" y="4" width="30" height="30"/>
                                     <connections>
-                                        <action selector="MoreInfo:" destination="-1" eventType="touchUpInside" id="fJF-dO-pHU"/>
+                                        <action selector="MoreInfo:" destination="-1" eventType="touchUpInside" id="XDe-dj-Iwr"/>
                                     </connections>
                                 </button>
                             </subviews>

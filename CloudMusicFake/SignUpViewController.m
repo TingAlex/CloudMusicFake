@@ -70,7 +70,7 @@
 }
 
 - (void)next_onClick:(id)sender {
-    BmobObject *user = [BmobObject objectWithClassName:@"_User"];
+    BmobObject *user = [BmobObject objectWithClassName:@"User"];
 
     NSDictionary *userDic = @{@"password": self.password.text, @"mobilePhoneNumber": self.identity.text, @"username": @"萌新", @"headpic": @"https://i.imgur.com/gYYnOMZg.jpg"};
     [user saveAllWithDictionary:userDic];
@@ -85,6 +85,7 @@
 //            https://i.imgur.com/gYYnOMZg.jpg
             [[NSUserDefaults standardUserDefaults] setObject:@"https://i.imgur.com/gYYnOMZg.jpg" forKey:@"userHeadpic"];
             //必须
+            [[NSUserDefaults standardUserDefaults] setObject:user.objectId forKey:@"userId"];
             [[NSUserDefaults standardUserDefaults] synchronize];
             LoginViewController *login = [[LoginViewController alloc] init];
             [self.navigationController pushViewController:login animated:YES];

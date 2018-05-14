@@ -23,7 +23,7 @@ NSInteger playingIndex;
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     [self.window makeKeyAndVisible];
 
-    BmobQuery *bquery = [BmobQuery queryWithClassName:@"_User"];
+    BmobQuery *bquery = [BmobQuery queryWithClassName:@"User"];
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     if ([userDefaults objectForKey:@"userPhone"] != nil && [userDefaults objectForKey:@"password"] != nil) {
         NSArray *array = @[@{@"mobilePhoneNumber": [userDefaults objectForKey:@"userPhone"]}, @{@"password": [userDefaults objectForKey:@"password"]}];
@@ -33,6 +33,7 @@ NSInteger playingIndex;
                 NSLog(@"network error!");
             } else {
                 if (array1.count == 1) {
+
                     NSLog(@"%@", [array1[0] objectForKey:@"mobilePhoneNumber"]);
                     UITabBarController *tabBarController = [[UITabBarController alloc] init];
                     self.window.rootViewController = tabBarController;

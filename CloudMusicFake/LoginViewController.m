@@ -75,7 +75,7 @@
     NSString *mobilePhoneNumber = self.identity.text;
     NSString *password = self.password.text;
     NSArray *array = @[@{@"mobilePhoneNumber": mobilePhoneNumber}, @{@"password": password}];
-    BmobQuery *bquery = [BmobQuery queryWithClassName:@"_User"];
+    BmobQuery *bquery = [BmobQuery queryWithClassName:@"User"];
     [bquery addTheConstraintByAndOperationWithArray:array];
     [bquery findObjectsInBackgroundWithBlock:^(NSArray *array1, NSError *error) {
         if (error) {

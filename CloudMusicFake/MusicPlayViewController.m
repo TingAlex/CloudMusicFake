@@ -9,8 +9,6 @@
 #import "MusicPlayViewController.h"
 
 @interface MusicPlayViewController ()
-//@property(nonatomic, strong) UILabel *title;
-//@property(nonatomic, strong) UIButton *name;
 @property(weak, nonatomic) IBOutlet UILabel *NowTime;
 @property(weak, nonatomic) IBOutlet UILabel *TotalTime;
 @property(weak, nonatomic) IBOutlet UIButton *Like;
@@ -36,11 +34,12 @@
 @property(weak, nonatomic) IBOutlet UISlider *ProgressBar;
 @property(weak, nonatomic) IBOutlet UIView *RotatePart;
 @property(nonatomic, assign) bool flagForAnimation;
-
+@property(nonatomic, assign) bool flagForLikeState;
 // 播放状态
 @property(nonatomic, assign) BOOL isPlaying;
 @property(nonatomic, assign) BOOL isSliding; // 是否正在滑动
-@property(nonatomic, assign) float angle;
+extern NSMutableArray *playingList;
+extern NSInteger playingIndex;
 
 // 是否横屏
 @property(nonatomic, assign) BOOL isLandscape;
@@ -63,7 +62,39 @@
 
 @implementation MusicPlayViewController
 - (IBAction)Like:(id)sender {
-    [self setupLikeBtn];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *userId = [userDefaults objectForKey:@"userId"];
+    BmobObject *post = [BmobObject objectWithoutDataWithClassName:@"User" objectId:userId];
+//新建relation对象
+    BmobRelation *relation = [[BmobRelation alloc] init];
+    if (self.flagForLikeState == false) {
+        [self setupLikedBtn];
+        //获取要添加关联关系的
+        [relation addObject:[BmobObject objectWithoutDataWithClassName:@"Music" objectId:[self.songInfo objectForKey:@"objectId"]]];
+//添加关联关系到likes列中
+        [post addRelation:relation forKey:@"likes"];
+//异步更新obj的数据
+        [post updateInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+            if (isSuccessful) {
+                NSLog(@"add like music successful");
+            } else {
+                NSLog(@"error %@", [error description]);
+            }
+        }];
+    } else {
+        [self setupLikeBtn];
+        [relation removeObject:[BmobObject objectWithoutDataWithClassName:@"Music" objectId:[self.songInfo objectForKey:@"objectId"]]];
+//添加关联关系到likes列中
+        [post addRelation:relation forKey:@"likes"];
+//异步更新obj的数据
+        [post updateInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+            if (isSuccessful) {
+                NSLog(@"remove like music successful");
+            } else {
+                NSLog(@"error %@", [error description]);
+            }
+        }];
+    }
 }
 
 - (IBAction)Download:(id)sender {
@@ -79,14 +110,16 @@
 }
 
 - (IBAction)UpMusic:(id)sender {
+    [self prepareStateForAnotherMusic];
     [self removeObserveAndNOtification];
-    extern NSMutableArray *playingList;
-    extern NSInteger playingIndex;
-    self.songInfo = [playingList objectAtIndex:(playingIndex - 1) % playingList.count];
+    playingIndex = (playingIndex - 1) % playingList.count;
+    self.songInfo = [playingList objectAtIndex:playingIndex];
     [self setMusicPicByInfo];
-    [self playMusicById:[self.songInfo valueForKey:@"song_id"]];
+    self.flagForAnimation = false;
+    [self playMusicById:[self.songInfo objectForKey:@"songId"]];
     [self addObserverAndNotification]; // 添加观察者，发布通知
 }
+
 
 - (IBAction)PlayOrStop:(id)sender {
     if (_isPlaying) {
@@ -97,17 +130,28 @@
 }
 
 - (IBAction)NextMusic:(id)sender {
+    [self prepareStateForAnotherMusic];
     [self removeObserveAndNOtification];
-    extern NSMutableArray *playingList;
-    extern NSInteger playingIndex;
-    self.songInfo = [playingList objectAtIndex:(playingIndex + 1) % playingList.count];
+    playingIndex = (playingIndex + 1) % playingList.count;
+    self.songInfo = [playingList objectAtIndex:playingIndex];
     [self setMusicPicByInfo];
-    [self playMusicById:[self.songInfo valueForKey:@"song_id"]];
+    self.flagForAnimation = false;
+    [self playMusicById:[self.songInfo objectForKey:@"songId"]];
     [self addObserverAndNotification]; // 添加观察者，发布通知
 }
 
+- (void)prepareStateForAnotherMusic {
+    self.NowTime.text = @"00:00";
+    self.TotalTime.text = @"00:00";
+    self.flagForAnimation = false;
+    [self.RotatePart.layer removeAllAnimations];
+    [self setupLikeBtn];
+    [self setupDownloadBtn];
+}
+
 - (void)setMusicPicByInfo {
-    NSURL *albumPicUrl = [NSURL URLWithString:[self.songInfo valueForKey:@"album_500_500"]];
+    [self setLikeState];
+    NSURL *albumPicUrl = [NSURL URLWithString:[self.songInfo objectForKey:@"albumPic"]];
     NSData *albumPicData = [NSData dataWithContentsOfURL:albumPicUrl];
     UIImageView *bgImgView = [[UIImageView alloc] initWithFrame:self.view.bounds];
     bgImgView.image = [[UIImage alloc] initWithData:albumPicData];
@@ -125,6 +169,32 @@
     self.AlbumImage.layer.cornerRadius = 165 / 2.0f;
 }
 
+- (void)setLikeState {
+    NSString *likes = [self.songInfo objectForKey:@"objectId"];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *userId = [userDefaults objectForKey:@"userId"];
+
+    BmobQuery *bquery = [BmobQuery queryWithClassName:@"User"];
+//构造约束条件
+    BmobQuery *inQuery = [BmobQuery queryWithClassName:@"Music"];
+    [inQuery whereKey:@"objectId" equalTo:likes];
+//匹配查询
+    [bquery whereKey:@"likes" matchesQuery:inQuery];
+    [bquery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+        if (error) {
+            NSLog(@"network error");
+        } else if (array) {
+            if (array.count == 0) {
+                NSLog(@"not found like this music");
+                [self setupLikeBtn];
+            } else {
+                NSLog(@"found like this music %@", array[0]);
+                [self setupLikedBtn];
+            }
+        }
+    }];
+}
+
 - (IBAction)PlayList:(id)sender {
 }
 
@@ -135,10 +205,7 @@
 
 - (IBAction)playerSliderTouchUpInside:(id)sender {
     self.isSliding = NO; // 滑动结束
-//    NSLog(@"player slider touch up inside");
-//    NSLog(@"not sliding");
     [self play];
-//    [self monitoringPlayback:self.songItem]; // 监听播放
 }
 
 - (IBAction)playerSliderValueChanged:(id)sender {
@@ -152,16 +219,24 @@
 
 - (void)dealloc {
     [self removeObserveAndNOtification];
-    [self.player removeTimeObserver:self._playTimeObserver]; // 移除playTimeObserver
+//    [self.player removeTimeObserver:self._playTimeObserver]; // 移除playTimeObserver
 }
 
 - (void)removeObserveAndNOtification {
     [self.player replaceCurrentItemWithPlayerItem:nil];
-    [self.songItem removeObserver:self forKeyPath:@"status"];
-    [self.songItem removeObserver:self forKeyPath:@"loadedTimeRanges"];
-    [self.player removeTimeObserver:self._playTimeObserver];
-    self._playTimeObserver = nil;
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    if (self.player.currentItem) {
+        [self.player.currentItem removeObserver:self forKeyPath:@"status"];
+        [self.player.currentItem removeObserver:self forKeyPath:@"status"];
+        [self.player.currentItem removeObserver:self forKeyPath:@"loadedTimeRanges"];
+        [self.player removeTimeObserver:self._playTimeObserver];
+        self._playTimeObserver = nil;
+        [[NSNotificationCenter defaultCenter] removeObserver:self];
+    }
+//    [self.songItem removeObserver:self forKeyPath:@"status"];
+//    [self.songItem removeObserver:self forKeyPath:@"loadedTimeRanges"];
+//    [self.player removeTimeObserver:self._playTimeObserver];
+//    self._playTimeObserver = nil;
+//    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)addObserverAndNotification {
@@ -230,18 +305,29 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     //Add glass effect background picture.
+//    [self setupInitialState];
+//    extern NSMutableArray *playingList;
+//    extern NSInteger playingIndex;
+//    self.songInfo = [playingList objectAtIndex:playingIndex];
+//    NSLog(@"now songInfo is %@", self.songInfo);
+//    [self setMusicPicByInfo];
+//    [self playMusicById:[self.songInfo valueForKey:@"song_id"]];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self removeObserveAndNOtification];
     [self setupInitialState];
-
-    extern NSMutableArray *playingList;
-    extern NSInteger playingIndex;
     self.songInfo = [playingList objectAtIndex:playingIndex];
-    NSLog(@"now songInfo is %@", self.songInfo);
     [self setMusicPicByInfo];
-    [self playMusicById:[self.songInfo valueForKey:@"song_id"]];
+    [self playMusicById:[self.songInfo objectForKey:@"songId"]];
+}
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [self removeObserveAndNOtification];
 }
 
 - (void)playMusicById:(NSString *)musicId {
+    NSLog(@"play music by id %@ %d", playingList, playingIndex);
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
@@ -315,11 +401,11 @@
 }
 
 - (void)setupInitialState {
+    self.flagForLikeState = false;
     self.NowTime.text = @"00:00";
     self.TotalTime.text = @"00:00";
     self.NowTime.textColor = [UIColor whiteColor];
     self.TotalTime.textColor = [UIColor whiteColor];
-    self.angle = 0.0;
     self.flagForAnimation = false;
     self.RotatePart.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.5];
     [self setupPlayBtn];
@@ -387,11 +473,13 @@
 - (void)setupLikeBtn {
     [self.Like setImage:[UIImage imageNamed:@"cm2_play_icn_love"] forState:UIControlStateNormal];
     [self.Like setImage:[UIImage imageNamed:@"cm2_play_icn_love_prs"] forState:UIControlStateHighlighted];
+    self.flagForLikeState = false;
 }
 
 - (void)setupLikedBtn {
     [self.Like setImage:[UIImage imageNamed:@"cm2_play_icn_loved"] forState:UIControlStateNormal];
     [self.Like setImage:[UIImage imageNamed:@"cm2_play_icn_loved_prs"] forState:UIControlStateHighlighted];
+    self.flagForLikeState = true;
 }
 
 - (void)setupDownloadBtn {

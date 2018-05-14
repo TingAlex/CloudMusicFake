@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MusicCellOfMyCollectionView.h"
+#import "AppDelegate.h"
 
 @interface MyCollectionViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
