@@ -17,6 +17,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    CGRect screen = [[UIScreen mainScreen] bounds];
+
+    UIView *myView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, screen.size.width, screen.size.height)];
+    UIImageView *bgImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, screen.size.width, screen.size.height)];
+    bgImage.image = [UIImage imageNamed:@"LaunchImage.png"];
+    [myView addSubview:bgImage];
+    [self.view addSubview:myView];
 }
 
 - (void)didReceiveMemoryWarning {

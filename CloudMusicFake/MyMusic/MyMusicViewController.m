@@ -59,15 +59,19 @@
     switch (indexPath.row) {
         case 0:
             cell.textLabel.text = @"本地音乐";
+            cell.imageView.image = [UIImage imageNamed:@"本地音乐.png"];
             break;
         case 1:
             cell.textLabel.text = @"最近播放";
+            cell.imageView.image = [UIImage imageNamed:@"最近播放.png"];
             break;
         case 2:
             cell.textLabel.text = @"我的电台";
+            cell.imageView.image = [UIImage imageNamed:@"我的电台.png"];
             break;
         case 3:
             cell.textLabel.text = @"我的收藏";
+            cell.imageView.image = [UIImage imageNamed:@"我的收藏.png"];
             break;
 
         default:

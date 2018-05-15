@@ -61,6 +61,7 @@
             if (cell == nil) {
                 cell = [[HeadpicCellOfPersonalView alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:reuseFlag];
             }
+            cell.myLabel.text = @"头像";
             cell.myImageView.image = [[UIImage alloc] initWithData:data];;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             return cell;
